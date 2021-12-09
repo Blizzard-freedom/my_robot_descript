@@ -1,0 +1,390 @@
+<?xml version="1.0"?>
+<robot name="robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<!-- parameter -->
+    <xacro:property name="W_radius" value="0.09" />
+    <xacro:property name="W_posi" value="0.12" />
+    <xacro:property name="W_lenght" value="0.04" />
+
+    <xacro:include filename="$(find my_robot_descript)/urdf/robot_plugins.xacro"/>
+<!-- color -->
+    <material name="red">
+        <color rgba="0.9 0 0 1"/>
+      </material>
+    <material name="yellow">
+        <color rgba="0.88 0.88 0 1"/>
+      </material>
+    <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+    <material name="green">
+        <color rgba="0.25 1 0.25 1"/>
+      </material>
+<!-- body -->
+<link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.4 0.4 0.16"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.12"/>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.4 0.4 0.16"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.12"/>
+    </collision>
+    <inertial>
+      <mass value="20"/>
+      <inertia ixx="0.3093" ixy="0.0" ixz="0.0" iyy="0.3093" iyz="0.0" izz="0.5333"/>
+    </inertial>
+  </link>
+  
+<!-- Wheel -->
+<!-- Front_Left_Wheel -->
+  <link name="flwheel">
+    <visual>
+      <geometry>
+        <cylinder length="${W_lenght}" radius="${W_radius}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${W_lenght}" radius="${W_radius}"/>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>5</mu>
+            <mu2>5</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.0022" ixy="0.0" ixz="0.0" iyy="0.0022" iyz="0.0" izz="0.0022"/>
+    </inertial>
+  </link>
+  
+  <joint name="base_to_flwheel" type="continuous">
+    <axis xyz="0 0 -1"/>
+    <parent link="base_link"/>
+    <child link="flwheel"/>
+    <origin xyz="0 0.22 ${W_radius}" rpy="1.5708 0 0"/>
+    <limit effort="1000" velocity="10" />
+  </joint>
+
+  <link name="spin_lock_1">
+    <visual>
+      <geometry>
+        <box size="0.08 0.08 0.01"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.01"/>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.08 0.08 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.2"/>
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0" izz="0.0002"/>
+    </inertial>
+  </link>
+
+  <joint name="flwheel_to_spin_lock_1" type="fixed">
+    <parent link="flwheel"/>
+    <child link="spin_lock_1"/>
+    <origin xyz="0 0 -0.03" rpy="0 0 0"/>
+  </joint>
+<!-- Front_Right_Wheel -->
+  <link name="frwheel">
+    <visual>
+      <geometry>
+        <cylinder length="${W_lenght}" radius="${W_radius}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${W_lenght}" radius="${W_radius}"/>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>5</mu>
+            <mu2>5</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.0022" ixy="0.0" ixz="0.0" iyy="0.0022" iyz="0.0" izz="0.0022"/>
+    </inertial>
+  </link>
+  
+  <joint name="base_to_frwheel" type="continuous">
+    <axis xyz="0 0 1"/>
+    <parent link="base_link"/>
+    <child link="frwheel"/>
+    <origin xyz="0 -0.22 ${W_radius}" rpy="-1.5708 0 0"/>
+    <limit effort="1000" velocity="10" />
+  </joint>
+
+  <link name="spin_lock_2">
+    <visual>
+      <geometry>
+        <box size="0.08 0.08 0.01"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.01"/>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.08 0.08 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.2"/>
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0" izz="0.0002"/>
+    </inertial>
+  </link>
+
+  <joint name="frwheel_to_spin_lock_2" type="fixed">
+    <parent link="frwheel"/>
+    <child link="spin_lock_2"/>
+    <origin xyz="0 0 -0.03" rpy="0 0 0"/>
+  </joint>
+<!-- Support wheel1 -->
+  <link name="blwheel">
+    <visual>
+      <geometry>
+        <sphere radius="0.06"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.06"/>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>0.1</mu>
+            <mu2>0.1</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.0014" ixy="0.0" ixz="0.0" iyy="0.0014" iyz="0.0" izz="0.0014"/>
+    </inertial>
+  </link>
+  
+  <joint name="base_to_blwheel" type="fixed">
+    <parent link="base_link"/>
+    <child link="blwheel"/>
+    <origin xyz="${W_posi} 0 0.06" rpy="0 0 0"/>
+  </joint>
+
+<!-- Support wheel2 -->
+  <link name="brwheel">
+    <visual>
+      <geometry>
+        <sphere radius="0.06"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.06"/>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>0.1</mu>
+            <mu2>0.1</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.0014" ixy="0.0" ixz="0.0" iyy="0.0014" iyz="0.0" izz="0.0014"/>
+    </inertial>
+  </link>
+  
+  <joint name="base_to_brwheel" type="fixed">
+    <parent link="base_link"/>
+    <child link="brwheel"/>
+    <origin xyz="-${W_posi} 0 0.06" rpy="0 0 0"/>
+  </joint>
+
+<!-- Top --> 
+  <!-- base --> 
+  <link name="base_Top">
+    <visual>
+      <geometry>
+        <box size="0.24 0.24 0.1"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="yellow"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.24 0.24 0.3"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="5"/>
+      <inertia ixx="0.0282" ixy="0.0" ixz="0.0" iyy="0.0282" iyz="0" izz="0.048"/>
+    </inertial>
+  </link>
+
+  <gazebo reference="base_Top">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+
+  <joint name="base_to_base_Top" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_Top"/>
+    <origin xyz="0 0 0.25" rpy="0 0 0"/>
+  </joint>
+  <!-- Top_up --> 
+  <link name="base_Top_up">
+    <visual>
+      <geometry>
+        <box size="0.2 0.2 0.14"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.2 0.2 0.14"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="2"/>
+      <inertia ixx="0.0099" ixy="0.0" ixz="0.0" iyy="0.0099" iyz="0" izz="0.0133"/>
+    </inertial>
+  </link>
+
+  <joint name="base_to_base_Top_up" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_Top_up"/>
+    <origin xyz="0 0 0.37" rpy="0 0 0"/>
+  </joint>
+  <!-- Hokuyo_Link_Base --> 
+  <link name="hokuyo_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.06" radius="0.1"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.06" radius="0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.0028" ixy="0.0" ixz="0.0" iyy="0.0028" iyz="0" izz="0.0050"/>
+    </inertial>
+  </link>
+
+  <gazebo reference="hokuyo_link">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <joint name="base_to_base_hokuyo_link" type="fixed">
+    <axis xyz="0 0 1"/>
+    <parent link="base_link"/>
+    <child link="hokuyo_link"/>
+    <origin xyz="0 0 0.47" rpy="0 0 0"/>
+  </joint>
+
+<!-- serve --> 
+  <link name="Serve_Arm">
+    <visual>
+      <geometry>
+        <box size="0.05 0.05 0.3"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-0.125 0 0.15"/>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.2 0.2 0.3"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="2"/>
+      <inertia ixx="0.0217" ixy="0.0" ixz="0.0" iyy="0.0217" iyz="0" izz="0.0133"/>
+    </inertial>
+  </link>
+
+  <joint name="base_Top_up_to_Serve_arm" type="prismatic">
+    <axis xyz="0 0 1"/>
+    <parent link="base_Top_up"/>
+    <child link="Serve_Arm"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <limit effort="1000" velocity="100" lower="-0.1" upper="0.1" />
+  </joint>
+
+  <transmission name="Serve_arm_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="F1_actuator">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="base_Top_up_to_Serve_arm">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+  <link name="Serve_Pad">
+    <visual>
+      <geometry>
+        <box size="0.2 0.2 0.05"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-0.125 0 0.15"/>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.2 0.2 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.0108" ixy="0.0" ixz="0.0" iyy="0.0108" iyz="0" izz="0.0067"/>
+    </inertial>
+  </link>
+
+  <joint name="Serve_arm_to_Serve_Pad" type="fixed">
+    <parent link="Serve_Arm"/>
+    <child link="Serve_Pad"/>
+    <origin xyz="0.1 0 0.125" rpy="0 0 0"/>
+  </joint>
+
+<!-- gazebo control --> 
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    </plugin>
+  </gazebo>
+</robot>

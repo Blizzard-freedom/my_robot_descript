@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<launch>
+  <group ns="/robot">
+  Robot Description from URDF
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find my_robot_descript)/urdf/robot.urdf'"/>
+    <arg name="x" default="-0.75"/>
+    <arg name="y" default="2.5"/>
+    <arg name="z" default="0.1"/>
+    <arg name="roll" default="0"/>
+    <arg name="pitch" default="0"/>
+    <arg name="yaw" default="4.7124"/>
+    <param name="/use_sim_time" value="true"/>
+    <!--Spawn-->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+    </node>
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"  output="screen" args="-urdf -model robot -param robot_description -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/>
+
+    <!-- Load controllers -->
+    <rosparam command="load" file="$(find my_robot_descript)/config/joints.yaml" />
+    <!--Control-->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner"
+            output="screen"
+            args="
+            joint_state_controller
+            mobile_base_controller
+            joint1_position_controller
+            --timeout 60">
+        </node>
+  </group>
+</launch>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find my_robot_descript)/urdf/robot.urdf'"/>
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find my_robot_descript)/config/config.rviz"/> 
+    
+</launch>

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+  <include file="$(find my_robot_descript)/launch/gazebo_W.launch"></include>
+  <include file="$(find my_robot_descript)/launch/spawn.launch"></include>
+  <include file="$(find my_robot_descript)/launch/navigation.launch"></include>
+  <include file="$(find my_robot_descript)/launch/rviz.launch"></include>
+  <include file="$(find my_robot_descript)/launch/Goal.launch"></include>
+</launch>
